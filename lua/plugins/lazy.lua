@@ -1,4 +1,4 @@
--- Install lazylazy
+-- Install lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -12,80 +12,88 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
+require("lazy").setup({
 
   -- Color scheme
-  { "catppuccin/nvim", as = "catppuccin" },
+  { "catppuccin/nvim", name = "catppuccin" },
 
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
 
   -- File tree
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
     lazy = false,
-    requires = {
+    dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-        require("nvim-tree").setup {}
-      end,
+      require("nvim-tree").setup({})
+    end,
   },
 
   -- Save and load buffers (a session) automatically for each folder
   {
-    'rmagatti/auto-session',
+    "rmagatti/auto-session",
     config = function()
-      require("auto-session").setup {
+      require("auto-session").setup({
         log_level = "error",
         auto_session_suppress_dirs = { "~/", "~/Downloads" },
-      }
-    end
+      })
+    end,
   },
 
   -- Comment code
   {
-    'terrortylor/nvim-comment',
+    "terrortylor/nvim-comment",
     config = function()
       require("nvim_comment").setup({ create_mappings = false })
-    end
+    end,
   },
 
   -- Visualize buffers as tabs
-  {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
+  { "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+
+  -- Mason (LSP/DAP/Linters manager)
   {
-  {
-    'williamboman/mason.nvim',
+    "williamboman/mason.nvim",
     lazy = false,
     opts = {},
   },
+
+  -- ToggleTerm
   {
-  "akinsho/toggleterm.nvim",
-  version = "*",
-  config = function()
-    require("toggleterm").setup({
-      size = 20,
-      open_mapping = [[<c-\>]], -- press Ctrl+\ to toggle terminal
-      shade_terminals = true,
-    })
-  end,
-},
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    config = function()
+      require("toggleterm").setup({
+        size = 20,
+        open_mapping = [[<c-\>]], -- press Ctrl+\ to toggle terminal
+        shade_terminals = true,
+      })
+    end,
+  },
+
   -- Autocompletion
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+    },
     config = function()
-      local cmp = require('cmp')
-
+      local cmp = require("cmp")
       cmp.setup({
         sources = {
-          {name = 'nvim_lsp'},
+          { name = "nvim_lsp" },
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-d>"] = cmp.mapping.scroll_docs(4),
+          -- Uncomment if you want Enter to confirm:
+          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
         }),
         snippet = {
           expand = function(args)
@@ -93,67 +101,78 @@ require('lazy').setup({
           end,
         },
       })
-    end
+    end,
   },
 
   -- LSP
   {
-    'neovim/nvim-lspconfig',
-    cmd = {'LspInfo', 'LspInstall', 'LspStart'},
-    event = {'BufReadPre', 'BufNewFile'},
+    "neovim/nvim-lspconfig",
+    cmd = { "LspInfo", "LspInstall", "LspStart" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-      {'williamboman/mason.nvim'},
-      {'williamboman/mason-lspconfig.nvim'},
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
     init = function()
-      -- Reserve a space in the gutter
-      -- This will avoid an annoying layout shift in the screen
-      vim.opt.signcolumn = 'yes'
+      -- Reserve a space in the gutter (avoids annoying layout shifts)
+      vim.opt.signcolumn = "yes"
     end,
     config = function()
-      local lsp_defaults = require('lspconfig').util.default_config
+      local lsp_defaults = require("lspconfig").util.default_config
 
       -- Add cmp_nvim_lsp capabilities settings to lspconfig
-      -- This should be executed before you configure any language server
       lsp_defaults.capabilities = vim.tbl_deep_extend(
-        'force',
+        "force",
         lsp_defaults.capabilities,
-        require('cmp_nvim_lsp').default_capabilities()
+        require("cmp_nvim_lsp").default_capabilities()
       )
 
-      -- LspAttach is where you enable features that only work
-      -- if there is a language server active in the file
-      vim.api.nvim_create_autocmd('LspAttach', {
-        desc = 'LSP actions',
+      -- Keymaps that are only active when an LSP is attached
+      vim.api.nvim_create_autocmd("LspAttach", {
+        desc = "LSP actions",
         callback = function(event)
-          local opts = {buffer = event.buf}
-
-          vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-          vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-          vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-          vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-          vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-          vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-          vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-          vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-          vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-          vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+          local opts = { buffer = event.buf }
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+          vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
+          vim.keymap.set({ "n", "x" }, "<F3>", function() vim.lsp.buf.format({ async = true }) end, opts)
+          vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opts)
         end,
       })
 
-      require('mason-lspconfig').setup({
-        ensure_installed = {},
+      -- Mason-lspconfig + Pyright config
+      require("mason-lspconfig").setup({
+        ensure_installed = { "pyright" },
         handlers = {
-          -- this first function is the "default handler"
-          -- it applies to every language server without a "custom handler"
-          function(server_name)
-            require('lspconfig')[server_name].setup({})
+          -- default handler
+          function(server)
+            require("lspconfig")[server].setup({})
           end,
-        }
+          -- custom pyright
+          ["pyright"] = function()
+            require("lspconfig").pyright.setup({
+              settings = {
+                python = {
+                  pythonPath = "/usr/bin/python3", -- system Python
+                  analysis = {
+                    typeCheckingMode = "basic", -- "off" | "basic" | "strict"
+                    diagnosticMode = "openFilesOnly",
+                    autoSearchPaths = true,
+                    useLibraryCodeForTypes = true,
+                  },
+                },
+              },
+            })
+          end,
+        },
       })
-    end
-  }
-},
-})
+    end,
+  },
 
+})
