@@ -1,34 +1,46 @@
-# AstroNvim Template
+# nvim_setup
+Install neovim from source
+```bash
+# neovim
+    cd /tmp
+    rm -rf /tmp/neovim
+    git clone https://github.com/neovim/neovim
+    cd neovim
+    git checkout stable
+    make CMAKE_BUILD_TYPE=RelWithDebInfo
+    make install
 
-**NOTE:** This is for AstroNvim v5+
-
-A template for getting started with [AstroNvim](https://github.com/AstroNvim/AstroNvim)
-
-## 🛠️ Installation
-
-#### Make a backup of your current nvim and shared folder
-
-```shell
-mv ~/.config/nvim ~/.config/nvim.bak
-mv ~/.local/share/nvim ~/.local/share/nvim.bak
-mv ~/.local/state/nvim ~/.local/state/nvim.bak
-mv ~/.cache/nvim ~/.cache/nvim.bak
 ```
+Install Astrovim with my setup
 
-#### Create a new user repository from this template
-
-Press the "Use this template" button above to create a new repository to store your user configuration.
-
-You can also just clone this repository directly if you do not want to track your user configuration in GitHub.
-
-#### Clone the repository
-
-```shell
-git clone https://github.com/<your_user>/<your_repository> ~/.config/nvim
-```
-
-#### Start Neovim
-
-```shell
+```bash
+git clone --depth 1 git@github.com:lfrecalde1/nvim_setup.git ~/.config/nvim
+rm -rf ~/.config/nvim/.git
 nvim
+```
+
+
+Install clangd inside container for remote developing
+```bash
+mkdir -p $HOME/clangd-root
+cd $HOME/clangd-root
+
+# download the runtime deps you need
+apt-get download libgrpc++1 libgrpc10 libabsl20210324 libc-ares2
+
+# extract them into this same folder
+for f in *.deb; do dpkg-deb -x "$f" .; done
+
+apt-get download clangd clangd-14
+dpkg-deb -x clangd_*_arm64.deb .
+dpkg-deb -x clangd-14_*_arm64.deb .
+
+export LD_LIBRARY_PATH=$HOME/clangd-root/usr/lib/aarch64-linux-gnu:$HOME/clangd-root/usr/lib:$LD_LIBRARY_PATH
+export PATH="$HOME/clangd-root/usr/bin:$PATH"
+$HOME/clangd-root/usr/bin/clangd --version
+```
+
+Verify you have clangd by running the following command
+```bash
+clangd --version
 ```
