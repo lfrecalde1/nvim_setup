@@ -25,14 +25,28 @@ Verify the installation:
 nvim --version
 ```
 
----
 
 ## 2. Install AstroNvim (Custom Configuration)
 
 Clone the custom AstroNvim configuration repository:
 
 ```bash
-git clone --depth 1 git@github.com:lfrecalde1/nvim_setup.git ~/.config/nvim
+
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+  lua5.3 \
+  liblua5.3-dev \
+  luarocks \
+  tree
+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+mv ~/.config/nvim ~/.config/nvim.bak
+mv ~/.local/share/nvim ~/.local/share/nvim.bak
+mv ~/.local/state/nvim ~/.local/state/nvim.bak
+mv ~/.cache/nvim ~/.cache/nvim.bak
+git clone --depth 1 https://github.com/lfrecalde1/nvim_setup.git ~/.config/nvim
 rm -rf ~/.config/nvim/.git
 ```
 
@@ -42,7 +56,7 @@ Start Neovim to trigger plugin installation:
 nvim
 ```
 
-> The first launch may take a few minutes while plugins are downloaded and configured.
+ The first launch may take a few minutes while plugins are downloaded and configured.
 
 ---
 
@@ -57,6 +71,7 @@ mkdir -p $HOME/clangd-root
 cd $HOME/clangd-root
 
 # Download runtime dependencies
+apt-get download clangd clangd-14
 apt-get download libgrpc++1 libgrpc10 libabsl20210324 libc-ares2
 
 # Extract packages
@@ -68,9 +83,9 @@ done
 ### 3.2 Download and Extract clangd
 
 ```bash
-apt-get download clangd clangd-14
-dpkg-deb -x clangd_*_arm64.deb .
-dpkg-deb -x clangd-14_*_arm64.deb .
+apt-get download libclang-cpp14 libllvm14
+dpkg-deb -x libclang-cpp14_*_arm64.deb .
+dpkg-deb -x libllvm14_*_arm64.deb .
 ```
 
 ### 3.3 Configure Environment Variables
