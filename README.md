@@ -3,6 +3,27 @@
 This guide describes how to set up **Neovim + AstroNvim** for **ROS 2 C++ development**, including `clangd` installation for remote/Singularity-based workflows and generation of `compile_commands.json` for proper language-server support.
 
 ---
+## 0. Install Zellij 
+We begin by installin rust in case you do not have it
+
+```bash
+rm -rf /tmp/rust
+mkdir -p /tmp/rust
+cd /tmp/rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
+chmod +x rustup-init.sh
+./rustup-init.sh -y
+. "$HOME/.cargo/env"
+cd ~
+```
+
+then install zellij by the following command:
+```bash
+cargo install --locked zellij
+rustup update
+```
+
+
 
 ## 1. Install Neovim from Source
 
