@@ -45,7 +45,7 @@ return {
     config = {
       clangd = {
         cmd = { "clangd" }, -- this will resolve to /usr/bin/clangd from PATH
-        root_dir = function() return vim.fn.expand "$HOME/payload_transportation_ws" end,
+        root_dir = function() return vim.fn.expand "$COLCON_WS_DIR" end,
       },
     },
     -- customize how language servers are attached
