@@ -76,6 +76,35 @@ Start Neovim to trigger plugin installation:
 ```bash
 nvim
 ```
+## 2.1 Install AstroNvim (Custom Configuration with Telescope and Codex)
+
+Clone the custom AstroNvim configuration repository:
+
+```bash
+
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+  lua5.3 \
+  liblua5.3-dev \
+  luarocks \
+  tree
+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+mv ~/.config/nvim ~/.config/nvim.bak
+mv ~/.local/share/nvim ~/.local/share/nvim.bak
+mv ~/.local/state/nvim ~/.local/state/nvim.bak
+mv ~/.cache/nvim ~/.cache/nvim.bak
+git clone --depth 1 https://github.com/lfrecalde1/nvim.git ~/.config/nvim
+rm -rf ~/.config/nvim/.git
+```
+
+Start Neovim to trigger plugin installation:
+
+```bash
+nvim
+```
 
  The first launch may take a few minutes while plugins are downloaded and configured.
 
