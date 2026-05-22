@@ -137,12 +137,11 @@ apt-get download libclang-cpp14 libllvm14
 dpkg-deb -x libclang-cpp14_*_arm64.deb .
 dpkg-deb -x libllvm14_*_arm64.deb .
 ```
-### 3.2 Download and Extract clangd For amd
-
+### 3.2 Download and Extract clangd For AMD
+Just run the following commands
 ```bash
-apt-get download libclang-cpp14 libllvm14
-dpkg-deb -x libclang-cpp14_*_amd64.deb .
-dpkg-deb -x libllvm14_*_amd64.deb .
+sudo apt-get update
+sudo apt-get install -y clangd
 ```
 
 ### 3.3 Configure Environment Variables
