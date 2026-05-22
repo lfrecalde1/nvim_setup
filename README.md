@@ -130,12 +130,19 @@ for f in *.deb; do
 done
 ```
 
-### 3.2 Download and Extract clangd
+### 3.2 Download and Extract clangd For ARM
 
 ```bash
 apt-get download libclang-cpp14 libllvm14
 dpkg-deb -x libclang-cpp14_*_arm64.deb .
 dpkg-deb -x libllvm14_*_arm64.deb .
+```
+### 3.2 Download and Extract clangd For amd
+
+```bash
+apt-get download libclang-cpp14 libllvm14
+dpkg-deb -x libclang-cpp14_*_amd64.deb .
+dpkg-deb -x libllvm14_*_amd64.deb .
 ```
 
 ### 3.3 Configure Environment Variables
