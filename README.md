@@ -217,6 +217,18 @@ This will generate:
 AstroNvim + clangd will now automatically pick up the correct compilation flags for all ROS 2 packages.
 
 ---
+## Install COdex Jetson Orin NX
+
+```bash
+  sudo npm uninstall -g @openai/codex
+  sudo apt remove -y nodejs npm
+  curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+  sudo apt install -y nodejs
+  node -v
+  npm -v
+  sudo npm install -g @openai/codex
+  codex
+```
 
 ## Notes and Recommendations
 
