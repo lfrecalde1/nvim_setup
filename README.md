@@ -220,11 +220,19 @@ AstroNvim + clangd will now automatically pick up the correct compilation flags 
 ## Install COdex Jetson Orin NX
 
 ```bash
-sudo apt remove -y libnode-dev libnode72 nodejs-doc
+ sudo apt purge -y nodejs libnode72 nodejs-doc npm
   sudo apt autoremove -y
-  sudo apt --fix-broken install
+
+  curl -fsSL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh
+  sudo -E bash /tmp/nodesource_setup.sh
+
   sudo apt install -y nodejs
-sudo npm install -g @openai/codex
+
+  node -v
+  npm -v
+
+  sudo npm install -g @openai/codex
+  codex --version
   codex
 ```
 
