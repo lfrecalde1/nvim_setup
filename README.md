@@ -37,7 +37,12 @@ cd neovim
 git checkout stable
 
 make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
+cmake --install build --prefix "$HOME/.local"
+
+export PATH="$HOME/.local/bin:$PATH"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+
+nvim --version
 ```
 
 Verify the installation:
