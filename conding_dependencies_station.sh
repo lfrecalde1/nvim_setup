@@ -116,5 +116,10 @@ zellij --version
 codex --version
 clangd --version | head -n 1
 
+sudo apt update
+sudo apt install "ros-${ROS_DISTRO}-rmw-cyclonedds-cpp"
+source "/opt/ros/${ROS_DISTRO}/setup.bash"
+colcon build --cmake-clean-cache
+
 printf '\nInstallation complete. Open a new shell or run:\n'
 printf '  export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"\n'
